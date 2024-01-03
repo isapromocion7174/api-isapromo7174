@@ -6,7 +6,9 @@ import fs from "fs";
 
 // Obtener un usuario por su id
 export const getUsers = async (req, res) => {
-    const users = await User.find().populate("rol"); // Buscar usuarios en la base de datos
+    const users = await User.find().populate("rol").sort({
+        createdAt: -1,
+    }); // Buscar usuarios en la base de datos
 
     return res.json(users); // Retornar los usuarios
 };

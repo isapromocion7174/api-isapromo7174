@@ -10,7 +10,6 @@ const eventSchema = new Schema(
             type: Date,
             required: true,
         },
-
         fechaFinal: {
             type: Date,
             required: true,
@@ -20,6 +19,10 @@ const eventSchema = new Schema(
         },
         direccion: {
             type: String,
+        },
+        foto: {
+            img_url: String,
+            img_id: String,
         },
     },
     {

@@ -3,7 +3,9 @@ import Anecdota from "../models/Anecdota.js";
 
 // Obtener todas las anecdotas
 export const getAnecdota = async (req, res) => {
-    const anecdotas = await Anecdota.find().populate("usuario"); // Buscar anecdotas en la base de datos
+    const anecdotas = await Anecdota.find().populate("usuario").sort({
+        createdAt: -1,
+    }); // Buscar anecdotas en la base de datos
 
     return res.json(anecdotas); // Retornar los anecdotas
 };

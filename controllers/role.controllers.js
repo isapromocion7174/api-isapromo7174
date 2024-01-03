@@ -3,7 +3,9 @@ import Role from "../models/Role.js";
 
 // Obtener un usuario por su id
 export const getRoles = async (req, res) => {
-    const roles = await Role.find(); // Buscar usuarios en la base de datos
+    const roles = await Role.find().sort({
+        createdAt: -1,
+    }); // Buscar usuarios en la base de datos
 
     return res.json(roles); // Retornar los usuarios
 };

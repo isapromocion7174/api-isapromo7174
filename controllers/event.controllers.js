@@ -1,11 +1,15 @@
 import Event from "../models/Event.js";
 import { filter } from "../helpers/Filter.js";
+import { upload, destroyImage } from "../utils/cloudinary.js";
+import fs from "fs";
 
 // Obtener un usuario por su id
 export const getEvent = async (req, res) => {
     const query = filter(req.body); // Obtener el query de filtrado
 
-    const events = await Event.find(query); // Buscar usuarios en la base de datos
+    const events = await Event.find().sort({
+        createdAt: -1,
+    }); // Buscar usuarios en la base de datos
 
     return res.json(events); // Retornar los usuarios
 };
@@ -28,6 +32,17 @@ export const createEvent = async (req, res) => {
     const { body } = req; // Obtener el body de la petición
 
     try {
+        if (req.files) {
+            const { foto } = req.files;
+            const result = await upload(foto.tempFilePath);
+            body.foto = {
+                img_url: result.secure_url,
+                img_id: result.public_id,
+            };
+
+            fs.unlinkSync(foto.tempFilePath);
+        }
+
         const event = await new Event(body); // Crear un usuario en memoria
 
         await event.save(); // Guardar usuario en la base de datos
@@ -46,6 +61,17 @@ export const updateEventById = async (req, res) => {
     const { body } = req; // Obtener el body de la petición
 
     try {
+        if (req.files) {
+            const { foto } = req.files;
+            const result = await upload(foto.tempFilePath);
+            body.foto = {
+                img_url: result.secure_url,
+                img_id: result.public_id,
+            };
+
+            fs.unlinkSync(foto.tempFilePath);
+        }
+
         const eventUpdated = await Event.findByIdAndUpdate(id, body, {
             new: true,
         }); // Buscar y actualizar usuario por id en la base de datos
@@ -70,6 +96,8 @@ export const deleteEventById = async (req, res) => {
         if (!eventDeleted)
             return res.status(404).json({ mensaje: "Evento no encontrado" }); // Si no existe el usuario, retornar un error
 
+        if (userDeleted?.foto?.img_id)
+            await destroyImage(userDeleted.foto.img_id);
         return res.json(eventDeleted); // Retornar el usuario eliminado
     } catch (error) {
         return res.status(500).json(error); // Retornar el error
