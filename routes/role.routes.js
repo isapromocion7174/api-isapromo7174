@@ -30,6 +30,6 @@ router.delete("/:id", [authMiddleware], deleteRoleById);
 
 // Ruta para crear usuario
 // POST /Role
-router.post("/", /* [authMiddleware], */ createRole);
+router.post("/", [authMiddleware], createRole);
 
 export default router;
