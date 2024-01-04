@@ -18,6 +18,18 @@ cloudinary.config({
 export const upload = async (pathFile) => {
     return await cloudinary.uploader.upload(pathFile, {
         folder: "GraduacionPage",
+        transformation: [
+            {
+                width: 1000,
+                crop: "scale",
+            },
+            {
+                quality: "auto",
+            },
+            {
+                fetch_format: "auto",
+            },
+        ],
     });
 };
 
