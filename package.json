@@ -1,6 +1,9 @@
 {
   "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": "20.x"
+  },
   "author": {
     "name": "Joan Corona",
     "email": "joaneliasc86@gmail.com"
